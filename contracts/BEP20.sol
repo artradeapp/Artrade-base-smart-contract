@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.0;
 
 import  "./IBEP20.sol";
 import  "./Ownable.sol";
@@ -431,7 +431,7 @@ contract BEP20 is Context, IBEP20, Ownable {
     *
     * See {ERC20-_burn}.
     */
-  function burn(uint256 amount) public onlyOwner returns (bool) {
+  function burn(uint256 amount) public returns (bool) {
     _burn(_msgSender(), amount);
     return true;
   }
