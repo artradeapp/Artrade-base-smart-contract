@@ -346,7 +346,7 @@ contract BEP20 is Context, IBEP20, Ownable {
 	 * reserveAdd), increasing _totalSupply_XM sub-supplies and
 	 * the total supply
   */
-  function mint(uint256 amount) public onlyOwner returns (bool) {
+  function mint(uint256 amount) public returns (bool) {
     require(block.timestamp > _endOfICO, "BEP20: Minting is only allowed after the end of ICO --> 2022/02/15 00:00:00");
     if ( (block.timestamp > _endOfICO)  && !_initialMintIsDone){
         _mint(_associatesAdd, _associatesEndOfIcoSupply);
