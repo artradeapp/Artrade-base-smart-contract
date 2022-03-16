@@ -36,104 +36,96 @@ contract BEP20 is Context, IBEP20, Ownable {
   uint256 immutable private _maxSupply_3M;
   uint256 immutable private _maxSupply_2M;
 
-  uint256 private _associatesMonthlySupply;
-  uint256 private _teamMonthlySupply;
-  uint256 private _seedMonthlySupply;
-  uint256 private _privSaleMonthlySupply;
-  uint256 private _marketingMonthlySupply;
-  uint256 private _icoRound1MonthlySupply;
-  uint256 private _icoRound2MonthlySupply;
-  uint256 private _reserveMonthlySupply;
+  uint256 private _wallet1MonthlySupply;
+  uint256 private _wallet2MonthlySupply;
+  uint256 private _wallet3MonthlySupply;
+  uint256 private _wallet4MonthlySupply;
+  uint256 private _wallet5MonthlySupply;
+  uint256 private _wallet6MonthlySupply;
 
-  uint256 private _associatesEndOfIcoSupply;
-  uint256 private _teamEndOfIcoSupply;
-  uint256 private _seedEndOfIcoSupply;
-  uint256 private _privSaleEndOfIcoSupply;
-  uint256 private _marketingEndOfIcoSupply;
-  uint256 private _icoRound1EndOfIcoSupply;
-  uint256 private _icoRound2EndOfIcoSupply;
-  uint256 private _icoRound3EndOfIcoSupply;
-  uint256 private _reserveEndOfIcoSupply;
+
+  uint256 private _wallet1EndOfIcoSupply;
+  uint256 private _wallet2EndOfIcoSupply;
+  uint256 private _wallet3EndOfIcoSupply;
+  uint256 private _wallet4EndOfIcoSupply;
+  uint256 private _wallet5EndOfIcoSupply;
+  uint256 private _wallet6EndOfIcoSupply;
 
   uint8   private _decimals;
   string  private _symbol;
   string  private _name;
 
   uint256 private _endOfICO;
-  uint256 private _endOfReserveCliff;
 
   uint256 private _startTime_2M;
   uint256 private _startTime_3M;
   uint256 private _startTime_4M;
   uint256 private _startTime_6M;
 
-  address private _associatesAdd;
-  address private _teamAdd;
-  address private _seedAdd;
-  address private _marketingAdd;
-  address private _privSaleAdd;
-  address private _icoRound1Add;
-  address private _icoRound2Add;
-  address private _icoRound3Add;
-  address private _reserveAdd;
+  address private _wallet1;
+  address private _wallet2;
+  address private _wallet3;
+  address private _wallet4;
+  address private _wallet5;
+  address private _wallet6;
 
-  constructor(address associatesAdd, address teamAdd, address seedAdd,address privSaleAdd, address marketingAdd, address icoRound1Add , address icoRound2Add, address icoRound3Add, address reserveAdd )  {
+  constructor(address wallet1, address wallet2, address wallet3,address wallet4, address wallet5, address wallet6)  {
     _name                 = "Artrade Token";
     _symbol               = "ATR";
     _decimals             = 9;
     _balances[msg.sender] = 0;
 
-    _endOfICO             = 1644879600; // 2022/02/15 00:00:00
-    _endOfReserveCliff    = 1707951600; // 2024/02/15 00:00:00
-    _startTime_2M         = 1649973600; // 2022/04/15 00:00:00
-    _startTime_3M         = 1652565600; // 2022/05/15 00:00:00
-    _startTime_4M         = 1655244000; // 2022/06/15 00:00:00
-    _startTime_6M         = 1660514400; // 2022/08/15 00:00:00
+    _endOfICO             = block.timestamp; 
+    _startTime_2M         = _endOfICO + (thirtyDays * 2); // 2 month after
+    _startTime_3M         = _endOfICO + (thirtyDays * 3); // 3 month after
+    _startTime_4M         = _endOfICO + (thirtyDays * 5); // 5 month after
+    _startTime_6M         = _endOfICO + (thirtyDays * 7); // 7 month after
 
-    _associatesMonthlySupply     = 8493000  * (10 ** uint256(_decimals)); //
-    _teamMonthlySupply           = 6650000  * (10 ** uint256(_decimals)); //
-    _seedMonthlySupply           = 6602500  * (10 ** uint256(_decimals)); //
-    _privSaleMonthlySupply       = 1498500  * (10 ** uint256(_decimals)); //
-    _marketingMonthlySupply      = 5400000  * (10 ** uint256(_decimals)); //
-    _icoRound1MonthlySupply      = 21250000 * (10 ** uint256(_decimals)); //
-    _icoRound2MonthlySupply      = 60000000 * (10 ** uint256(_decimals)); //
-    _reserveMonthlySupply        = 17600000 * (10 ** uint256(_decimals)); //
-
-    _associatesEndOfIcoSupply    = 8046000   * (10 ** uint256(_decimals));
-    _teamEndOfIcoSupply          = 6300000   * (10 ** uint256(_decimals));
-    _seedEndOfIcoSupply          = 6255000   * (10 ** uint256(_decimals));
-    _privSaleEndOfIcoSupply      = 1998000   * (10 ** uint256(_decimals));
-    _marketingEndOfIcoSupply     = 7200000   * (10 ** uint256(_decimals));
-    _icoRound1EndOfIcoSupply     = 22500000  * (10 ** uint256(_decimals));
-    _icoRound2EndOfIcoSupply     = 60000000  * (10 ** uint256(_decimals));
-    _icoRound3EndOfIcoSupply     = 450000000 * (10 ** uint256(_decimals));
-    _reserveEndOfIcoSupply       = 79200000  * (10 ** uint256(_decimals));
+    _wallet1MonthlySupply        = 4739256671          * (10 ** uint256(7)); //
+    _wallet2MonthlySupply        = 21962955            * (10 ** uint256(_decimals)); //
+    _wallet3MonthlySupply        = 6967485             * (10 ** uint256(_decimals)); //
+    _wallet4MonthlySupply        = 112052348683481     * (10 ** uint256(2)); //
+    _wallet5MonthlySupply        = 151894456           * (10 ** uint256(8)); //
 
 
-    _maxSupply_6M         = 708219000   * (10 ** uint256(_decimals));
-    _maxSupply_4M         = 82782000    * (10 ** uint256(_decimals));
-    _maxSupply_3M         = 127500000   * (10 ** uint256(_decimals));
-    _maxSupply_2M         = 240000000   * (10 ** uint256(_decimals));
+
+    _wallet1EndOfIcoSupply       = 21326655022   * (10 ** uint256(7));
+    _wallet2EndOfIcoSupply       = 20807010     * (10 ** uint256(_decimals));
+    _wallet3EndOfIcoSupply       = 9289980      * (10 ** uint256(_decimals));
+    _wallet4EndOfIcoSupply       = 112052347899114    * (10 ** uint256(2));
+    _wallet5EndOfIcoSupply       = 151894456    * (10 ** uint256(8));
+    _wallet6EndOfIcoSupply       = 70243377     * (10 ** uint256(_decimals));
+
+
+    _maxSupply_6M         = 1482472951  * (10 ** uint256(_decimals));
+    _maxSupply_4M         = 92899800    * (10 ** uint256(_decimals));
+    _maxSupply_3M         = 78436644    * (10 ** uint256(_decimals));
+    _maxSupply_2M         = 75947228    * (10 ** uint256(_decimals));
 
     _maxSupply            = 1800000000 * (10 ** uint256(_decimals)); // 1,8 MD
 
     _initialMintIsDone    = false;
-    _authoriseMin_6M      = true;
-    _authoriseMin_4M      = true;
-    _authoriseMin_3M      = true;
-    _authoriseMin_2M      = true;
 
 
-    _associatesAdd        = associatesAdd;
-    _teamAdd              = teamAdd;
-    _seedAdd              = seedAdd;
-    _marketingAdd         = marketingAdd;
-    _privSaleAdd          = privSaleAdd;
-    _icoRound1Add         = icoRound1Add;
-    _icoRound2Add         = icoRound2Add;
-    _icoRound3Add         = icoRound3Add;
-    _reserveAdd           = reserveAdd;
+    _wallet1        = wallet1;
+    _wallet2        = wallet2;
+    _wallet3        = wallet3;
+    _wallet4        = wallet4;
+    _wallet5        = wallet5;
+    _wallet6        = wallet6;
 
+    _mint(_wallet1, _wallet1EndOfIcoSupply);
+    _mint(_wallet2, _wallet2EndOfIcoSupply);
+    _mint(_wallet3, _wallet3EndOfIcoSupply);
+    _mint(_wallet4, _wallet4EndOfIcoSupply);
+    _mint(_wallet5, _wallet5EndOfIcoSupply);
+    _mint(_wallet6, _wallet6EndOfIcoSupply);
+    _totalSupply_2M   = _totalSupply_2M.add(_wallet5EndOfIcoSupply);
+    _totalSupply_3M   = _totalSupply_3M.add(_wallet4EndOfIcoSupply);
+    _totalSupply_4M   = _totalSupply_4M.add(_wallet3EndOfIcoSupply);
+    _totalSupply_6M   = _totalSupply_6M.add(_wallet1EndOfIcoSupply).add(_wallet2EndOfIcoSupply);
+
+    _totalSupply.add(_wallet1EndOfIcoSupply).add(_wallet2EndOfIcoSupply).add(_wallet3EndOfIcoSupply).add(_wallet4EndOfIcoSupply).add(_wallet5EndOfIcoSupply).add(_wallet6EndOfIcoSupply);
   }
 
   /**
@@ -143,66 +135,45 @@ contract BEP20 is Context, IBEP20, Ownable {
     return owner();
   }
   /**
-   * @dev Returns  associates address.
+   * @dev Returns  Round 3 address.
    */
-  function getAssociatesAdd() external view returns (address) {
-    return _associatesAdd;
+  function getRound3Add() external view returns (address) {
+    return _wallet6;
   }
 
   /**
-   * @dev Returns  team address.
+   * @dev Returns  Round 2 address.
    */
-  function getTeamAdd() external view returns (address) {
-    return _teamAdd;
+  function getRaound2Add() external view returns (address) {
+    return _wallet5;
   }
 
   /**
-   * @dev Returns  team address.
+   * @dev Returns  Round 1  address.
    */
-  function getSeedAdd() external view returns (address) {
-    return _seedAdd;
-  }
-
-  /**
-   * @dev Returns  team address.
-   */
-  function getMarketingAdd() external view returns (address) {
-    return _marketingAdd;
+  function getRound1Add() external view returns (address) {
+    return _wallet4;
   }
 
   /**
    * @dev Returns  Private Sale address.
    */
-  function getPrivSaleAdd() external view returns (address) {
-    return _privSaleAdd;
+  function getPrivateSaleAdd() external view returns (address) {
+    return _wallet3;
   }
 
   /**
-   * @dev Returns  ICO Round 1 address.
+   * @dev Returns  Team and Associates address.
    */
-  function getICORound1Add() external view returns (address) {
-    return _icoRound1Add;
-  }
-
-  /**
-   * @dev Returns  ICO Round 2 address.
-   */
-  function getICORound2Add() external view returns (address) {
-    return _icoRound2Add;
-  }
-
-  /**
-   * @dev Returns  ICO Round 3 address.
-   */
-  function getICORound3Add() external view returns (address) {
-    return _icoRound3Add;
+  function getTeamAdd() external view returns (address) {
+    return _wallet2;
   }
 
   /**
    * @dev Returns  reserve address.
    */
   function getReserveAdd() external view returns (address) {
-    return _reserveAdd;
+    return _wallet1;
   }
 
   /**
@@ -245,6 +216,13 @@ contract BEP20 is Context, IBEP20, Ownable {
    */
    function maxSupply() public view  returns (uint256) {
        return _maxSupply;
+   }
+
+   /**
+   * @dev Returns the end of ico .
+   */
+   function getEndOfICO() public view  returns (uint256) {
+       return _endOfICO;
    }
 
   /**
@@ -346,82 +324,41 @@ contract BEP20 is Context, IBEP20, Ownable {
 	 * reserveAdd), increasing _totalSupply_XM sub-supplies and
 	 * the total supply
   */
-  function mint(uint256 amount) public returns (bool) {
-    require(block.timestamp > _endOfICO, "BEP20: Minting is only allowed after the end of ICO --> 2022/02/15 00:00:00");
-    if ( (block.timestamp > _endOfICO)  && !_initialMintIsDone){
-        _mint(_associatesAdd, _associatesEndOfIcoSupply);
-        _mint(_teamAdd, _teamEndOfIcoSupply);
-        _mint(_seedAdd, _seedEndOfIcoSupply);
-        _mint(_privSaleAdd, _privSaleEndOfIcoSupply);
-        _mint(_marketingAdd, _marketingEndOfIcoSupply);
-        _mint(_icoRound1Add, _icoRound1EndOfIcoSupply);
-        _mint(_icoRound2Add, _icoRound2EndOfIcoSupply);
-        _mint(_icoRound3Add, _icoRound3EndOfIcoSupply);
-        _mint(_reserveAdd, _reserveEndOfIcoSupply);
-        _initialMintIsDone = true;
-    }
-      if ( _initialMintIsDone){
-        if ( amount == cliffSixM){
-          if (  block.timestamp > _startTime_6M.add(thirtyDays)){
-             _startTime_6M = _startTime_6M.add(thirtyDays);
-             _authoriseMin_6M = true;
-          }
-          if ((block.timestamp >= _startTime_6M ) && _authoriseMin_6M){
-            require(_totalSupply_6M.add(_associatesMonthlySupply).add(_teamMonthlySupply).add(_seedMonthlySupply).add(_reserveMonthlySupply) <= _maxSupply_6M, "BEP20: Assocites, Team and Seed cap exceeded");
-            require(_totalSupply.add(_associatesMonthlySupply).add(_teamMonthlySupply).add(_seedMonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
-            _mint(_associatesAdd, _associatesMonthlySupply);
-            _mint(_teamAdd, _teamMonthlySupply);
-            _mint(_seedAdd, _seedMonthlySupply);
-            _mint(_reserveAdd, _reserveMonthlySupply);
-            _totalSupply_6M   = _totalSupply_6M.add(_associatesMonthlySupply).add(_teamMonthlySupply).add(_seedMonthlySupply).add(_reserveMonthlySupply);
-            _authoriseMin_6M = false;
-          }
+  function mint(uint256 mintValue) public onlyOwner returns (bool) {
+        require(( mintValue == cliffSixM) ||  ( mintValue == cliffFourM) || ( mintValue == cliffThreeM) || ( mintValue == cliffTwoM), "BEP20: mint value not authorized");
+        if ( mintValue == cliffSixM){
+            require(block.timestamp >= _startTime_6M , "BEP20: too early for minting request");
+            require(_totalSupply_6M.add(_wallet1MonthlySupply).add(_wallet2MonthlySupply) <= _maxSupply_6M, "BEP20: Assocites, Reserve, Team and Seed cap exceeded");
+            require(_totalSupply.add(_wallet1MonthlySupply).add(_wallet2MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
+            _mint(_wallet1, _wallet1MonthlySupply);
+            _mint(_wallet2, _wallet2MonthlySupply);
+            _totalSupply_6M   = _totalSupply_6M.add(_wallet1MonthlySupply).add(_wallet2MonthlySupply);
+            _startTime_6M     = _startTime_6M.add(thirtyDays);   
         }
-
-        if ( amount == cliffFourM){
-          if (  block.timestamp > _startTime_4M.add(thirtyDays)){
-             _startTime_4M = _startTime_4M.add(thirtyDays);
-             _authoriseMin_4M = true;
-          }
-          if ((block.timestamp >= _startTime_4M ) && _authoriseMin_4M){
-            require(_totalSupply_4M.add(_privSaleMonthlySupply).add(_marketingMonthlySupply) <= _maxSupply_4M, "BEP20: Marketing and Private Sale cap exceeded");
-            require(_totalSupply.add(_privSaleMonthlySupply).add(_marketingMonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
-            _mint(_privSaleAdd, _privSaleMonthlySupply);
-            _mint(_marketingAdd, _marketingMonthlySupply);
-            _totalSupply_4M   = _totalSupply_4M.add(_privSaleMonthlySupply).add(_marketingMonthlySupply);
-            _authoriseMin_4M = false;
-          }
-
+        if ( mintValue == cliffFourM){
+            require(block.timestamp >= _startTime_4M , "BEP20: too early for minting request");
+            require(_totalSupply_4M.add(_wallet3MonthlySupply) <= _maxSupply_4M, "BEP20: Marketing and Private Sale cap exceeded");
+            require(_totalSupply.add(_wallet3MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
+            _mint(_wallet3, _wallet3MonthlySupply);
+            _totalSupply_4M   = _totalSupply_4M.add(_wallet3MonthlySupply);
+            _startTime_4M     = _startTime_4M.add(thirtyDays);  
         }
-        if ( amount == cliffThreeM){
-          if (  block.timestamp > _startTime_3M.add(thirtyDays)){
-             _startTime_3M = _startTime_3M.add(thirtyDays);
-             _authoriseMin_3M = true;
-          }
-          if ((block.timestamp >= _startTime_3M ) && _authoriseMin_3M){
-            require(_totalSupply_3M.add(_icoRound1MonthlySupply)<= _maxSupply_3M, "BEP20: ICO Round 1 cap exceeded");
-            require(_totalSupply.add(_icoRound1MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
-            _mint(_icoRound1Add, _icoRound1MonthlySupply);
-            _totalSupply_3M   = _totalSupply_3M.add(_icoRound1MonthlySupply);
-            _authoriseMin_3M = false;
-          }
-
+        if ( mintValue == cliffThreeM){
+            require(block.timestamp >= _startTime_3M, "BEP20: too early for minting request");
+            require(_totalSupply_3M.add(_wallet4MonthlySupply)<= _maxSupply_3M, "BEP20: ICO Round 1 cap exceeded");
+            require(_totalSupply.add(_wallet4MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
+            _mint(_wallet4, _wallet4MonthlySupply);
+            _totalSupply_3M   = _totalSupply_3M.add(_wallet4MonthlySupply);
+            _startTime_3M     = _startTime_3M.add(thirtyDays);
         }
-        if ( amount == cliffTwoM){
-          if (  block.timestamp > _startTime_2M.add(thirtyDays)){
-             _startTime_2M = _startTime_2M.add(thirtyDays);
-             _authoriseMin_2M = true;
-          }
-          if ((block.timestamp >= _startTime_2M ) && _authoriseMin_2M){
-            require(_totalSupply_2M.add(_icoRound2MonthlySupply)<= _maxSupply_2M, "BEP20: ICO Round 2 cap exceeded");
-            require(_totalSupply.add(_icoRound2MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
-            _mint(_icoRound2Add, _icoRound2MonthlySupply);
-            _totalSupply_2M   = _totalSupply_2M.add(_icoRound2MonthlySupply);
-            _authoriseMin_2M = false;
-          }
-
+        if ( mintValue == cliffTwoM){
+            require(block.timestamp >= _startTime_2M, "BEP20: too early for minting request");
+            require(_totalSupply_2M.add(_wallet5MonthlySupply)<= _maxSupply_2M, "BEP20: ICO Round 2 cap exceeded");
+            require(_totalSupply.add(_wallet5MonthlySupply) <= maxSupply(), "BEP20: cap exceeded");
+            _mint(_wallet5, _wallet5MonthlySupply);
+            _totalSupply_2M   = _totalSupply_2M.add(_wallet5MonthlySupply);
+            _startTime_2M     = _startTime_2M.add(thirtyDays);
         }
-      }
     return true;
   }
 
@@ -431,7 +368,7 @@ contract BEP20 is Context, IBEP20, Ownable {
     *
     * See {ERC20-_burn}.
     */
-  function burn(uint256 amount) public returns (bool) {
+  function burn(uint256 amount) public  returns (bool) {
     _burn(_msgSender(), amount);
     return true;
   }
@@ -469,8 +406,6 @@ contract BEP20 is Context, IBEP20, Ownable {
   function _transfer(address sender, address recipient, uint256 amount) internal virtual {
     require(sender != address(0), "BEP20: transfer from the zero address");
     require(recipient != address(0), "BEP20: transfer to the zero address");
-    // condition  chaque mois
-
     _balances[sender] = _balances[sender].sub(amount, "BEP20: transfer amount exceeds balance");
     _balances[recipient] = _balances[recipient].add(amount);
     emit Transfer(sender, recipient, amount);
